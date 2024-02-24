@@ -1,27 +1,21 @@
-import { useState } from "react";
-import BasicForm from "./components/BasicForm";
-import AdvancedForm from "./components/AdvancedForm";
+import AdvancedForm from "./components/appointment ";
 import "./App.css";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [view, setView] = useState("basic");
+  const [message, setMessage] = useState(null);
+  useEffect(() => {
+    fetch("/api")
+      .then((response) => response.json())
+      .then((data) => setMessage(data.message));
+  }, []);
+
+  console.log({ message });
+
   return (
     <div className="App">
-      <nav>
-        <h3
-          onClick={() => setView("basic")}
-          style={{ color: view === "basic" ? "#fff" : "" }}
-        >
-          Basic
-        </h3>
-        <h3
-          onClick={() => setView("advanced")}
-          style={{ color: view === "advanced" ? "#fff" : "" }}
-        >
-          Advanced
-        </h3>
-      </nav>
-      {view === "basic" ? <BasicForm /> : <AdvancedForm />}
+      {!message ? "loading..." : message}
+      <AdvancedForm />
     </div>
   );
 }
